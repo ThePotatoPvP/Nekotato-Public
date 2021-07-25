@@ -26,15 +26,15 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        with open("settings.json", "r") as f:
-            settings = json.load(f)
+        greet_channel = sql_get(member.guild, "greet_channel")
+        default_role = sql_get(member.guild, "default_role")
 
-        if settings[str(member.guild.id)][0] != "None":
-            channel = self.bot.get_channel(int(settings[str(member.guild.id)][0]))
-            await channel.send(settings[str(member.guild.id)][1].replace("@", f"{member.mention}"))
+        if not (greet_channel is None or greet_channel == "None"):
+            channel = self.bot.get_channel(int(greet_channel))
+            await channel.send(sql_get(member.guild, 'greet_with').replace('@', f'{member.mention}'))
 
-        if settings[str(member.guild.id)][2] != "None":
-            role = member.guild.get_role(int(settings[str(member.guild.id)][2]))
+        if not (default_role is None or default_role == "None"):
+            role = member.guild.get_role(int(default_role))
             await member.add_roles(role)
 
     @commands.command(hidden=True)
@@ -152,9 +152,9 @@ class Moderation(commands.Cog):
                                 inline=False)
 
         embed.add_field(name="​",
-                        value="[Invite me](https://discord.com/api/oauth2/authorize?client_id=862433335833002045&permissions=268561472&scope=bot) \
+                        value="[Invite me](https://discord.com/api/oauth2/authorize?client_id=862433335833002045&permissions=85056&scope=bot) \
                             | [Support server](https://discord.gg/MBjkNqaSGW) \
-                            | [Vote for me](https://discord.gg/MBjkNqaSGW)",
+                            | [Vote for me](https://stackoverflow.com/questions/62239816/how-do-i-make-the-bot-respond-when-someone-mentions-it-discord-py?rq=1)",
                         inline=False)
 
         embed.set_author(name=f"{self.bot.user.display_name}'s help page", icon_url=self.bot.user.avatar_url)
