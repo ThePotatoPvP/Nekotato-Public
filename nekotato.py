@@ -60,17 +60,29 @@ class Moderation(commands.Cog):
     @commands.command(aliases=["giverole"], brief="Gives the requested role(s) to the requested user(s)")
     @commands.has_permissions(manage_roles=True)
     async def addrole(self, ctx):
-        for member in ctx.message.mentions:
+        if ctx.message.member_mentions:
             
-            for role in ctx.message.role_mentions:
-                
-                try:
-                    member.add_roles(role)
-                except:
-                    ctx.send(f"I do not have permissions to give {role.mention} role to {member.mention}")
-                finally:
-                    ctx.send(f"I do not have permissions to give {role.name} role to {member.mention}")
+            if ctx.message.role_mentions:
+
+                for member in ctx.message.mentions:
                     
+                    for role in ctx.message.role_mentions:
+                        
+                        try:
+                            await member.add_roles(role, reason=f"{ctx.author.name} asked me to")
+                        except Forbidden:
+                            await ctx.send(f"I do not have permissions to give {role.mention} role to {member.mention}")
+                        except:
+                            await ctx.send(f"An error occured while giving `{role.name}` role to {member.mention}")
+                
+                await ctx.message.add_reaction("\u2705")
+
+            else:
+                await ctx.send("Please provide the role(s) to give")
+
+        else:
+            await ctx.send("Please provide the member(s) to give roles to")
+      
     @commands.command(brief="Deletes the requested number of messages, 5 by default.")
     @commands.has_permissions(manage_messages=True)
     async def clean(self, ctx, number="5"):
@@ -154,7 +166,7 @@ class Moderation(commands.Cog):
         embed.add_field(name="​",
                         value="[Invite me](https://discord.com/api/oauth2/authorize?client_id=862433335833002045&permissions=85056&scope=bot) \
                             | [Support server](https://discord.gg/MBjkNqaSGW) \
-                            | [Vote for me](https://stackoverflow.com/questions/62239816/how-do-i-make-the-bot-respond-when-someone-mentions-it-discord-py?rq=1)",
+                            | [Vote for me](https://top.gg/bot/862433335833002045/vote)",
                         inline=False)
 
         embed.set_author(name=f"{self.bot.user.display_name}'s help page", icon_url=self.bot.user.avatar_url)
@@ -166,7 +178,7 @@ class Moderation(commands.Cog):
                               url="https://discord.com/api/oauth2/authorize?client_id=862433335833002045&permissions=85056&scope=bot",
                               color=0xf8e3e1)
         
-        embed.set_author(name=f"{self.bot.user.display_name}'s invite link", icon_url=self.bot.user.avatar_url)
+        embed.set_author(name="Nekotato's invite link", icon_url=self.bot.user.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(brief="Enables you to change the prefix of the bot on the server")
@@ -232,7 +244,7 @@ class Moderation(commands.Cog):
 
         embed.add_field(name="​", value="[Invite me](https://discord.com/api/oauth2/authorize?client_id=862433335833002045&permissions=85056&scope=bot) \
                         | [Support server](https://discord.gg/MBjkNqaSGW) \
-                        | [Vote for me](https://discord.gg/MBjkNqaSGW)", inline=False)
+                        | [Vote for me](https://top.gg/bot/862433335833002045/vote)", inline=False)
         embed.set_author(name="Here are my settings for this server.", icon_url=self.bot.user.avatar_url)
         await ctx.channel.send(embed=embed)
 
@@ -241,6 +253,32 @@ class Moderation(commands.Cog):
         """Sends the author an invite link to the support server in dms"""
         await ctx.author.send("Hey, here's the invite to my support server, I hope you'll find the help you need \n "
                               "https://discord.gg/MBjkNqaSGW")
+
+    @commands.command(aliases=["removerole"], brief="Takes the requested role(s) away from the requested user(s)")
+    @commands.has_permissions(manage_roles=True)
+    async def takerole(self, ctx):
+        if ctx.message.member_mentions:
+            
+            if ctx.message.role_mentions:
+
+                for member in ctx.message.mentions:
+                    
+                    for role in ctx.message.role_mentions:
+                        
+                        try:
+                            await member.remove_roles(role, reason=f"{ctx.author.name} asked me to")
+                        except Forbidden:
+                            await ctx.send(f"I do not have permissions to remove {role.mention} role from {member.mention}")
+                        except:
+                            await ctx.send(f"An error occured while removing `{role.name}` role from {member.mention}")
+                
+                await ctx.message.add_reaction("\u2705")
+
+            else:
+                await ctx.send("Please provide the role(s) to remove")
+
+        else:
+            await ctx.send("Please provide the member(s) to remove the role(s) from")       
 
     @commands.command(hidden=True)
     @commands.has_permissions(administrator=True)
