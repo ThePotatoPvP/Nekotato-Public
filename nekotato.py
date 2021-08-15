@@ -4,6 +4,9 @@ from discord.ext import commands
 import sqlite3
 import json
 import os
+import aiohttp
+
+from io import BytesIO
 
 
 class Moderation(commands.Cog):
@@ -57,6 +60,58 @@ class Moderation(commands.Cog):
             else:
                 ctx.send("I can't seem to find what command is that gif for")
 
+    @commands.command(aliases=["createemoji", "Createemoji", "Addemote", "createemote", "addemoji", "Addemoji"], brief="addemote <url/emote> <name> to add an emote to your server")
+    @commands.has_permissions()
+    async def addemote(self, ctx, emote=None, *, name=None):
+        if emote is None:
+            await ctx.send("Use `addemote <url/emote> <name>` to add an emote in this server !")
+
+        elif name is None or len(name)<2:
+            await ctx.send("Emote must have a name at least 2 letters long !")
+
+        else:
+            #Grab the emote id to have the link to the image
+            if emote.startswith("<") and emote.endswith(">"):
+                count = 0
+                animated = False
+                if emote[1] == "a": animated = True
+                while count<2:
+                    if emote[0] == ":":
+                        count+=1
+                    emote=emote[1:]
+                emote_id = emote[:-1]
+                emote = f"https://cdn.discordapp.com/emojis/{emote_id}.png?size=128"
+                if animated:
+                    emote = emote.replace("png", "gif")
+            else:
+
+                if "gif" in emote: animated = True
+                else: animated = False
+            url = emote
+
+            async with aiohttp.ClientSession() as ses:
+
+                	async with ses.get(url) as r:
+                		try:
+
+                			img_or_gif = BytesIO(await r.read())
+                			b_value = img_or_gif.getvalue()
+                			if r.status in range(200, 299):
+
+                				emoji = await ctx.guild.create_custom_emoji(image=b_value, name=name.replace(" ", ""))
+                				if animated :await ctx.send(f'Done, I just added <a:{name}:{emoji.id}> to the server !')
+                				else:await ctx.send(f'Done, I just added <:{name}:{emoji.id}> to the server !')
+                				await ses.close()
+
+                			else:
+                				await ctx.send(f'Error when making request | {r.status} response. !')
+                				await ses.close()
+
+                		except discord.HTTPException:
+                 		    await ctx.send('An error occured while adding the emoji \n \
+                                Please make sure your image is 256*256 or smaller \n \
+                                To avoid bugs like this, use the image link directly')
+
     @commands.command(aliases=["giverole"], brief="Gives the requested role(s) to the requested user(s)")
     @commands.has_permissions(manage_roles=True)
     async def addrole(self, ctx):
@@ -70,7 +125,7 @@ class Moderation(commands.Cog):
                         
                         try:
                             await member.add_roles(role, reason=f"{ctx.author.name} asked me to")
-                        except Forbidden:
+                        except discord.Forbidden:
                             await ctx.send(f"I do not have permissions to give {role.mention} role to {member.mention}")
                         except:
                             await ctx.send(f"An error occured while giving `{role.name}` role to {member.mention}")
@@ -78,10 +133,10 @@ class Moderation(commands.Cog):
                 await ctx.message.add_reaction("\u2705")
 
             else:
-                await ctx.send("Please provide the role(s) to give")
+                await ctx.send("Please use `addrole <@member mention> <@role mention>`")
 
         else:
-            await ctx.send("Please provide the member(s) to give roles to")
+            await ctx.send(f"Please use `addrole <@member mention> <@role mention>`")
       
     @commands.command(brief="Deletes the requested number of messages, 5 by default.")
     @commands.has_permissions(manage_messages=True)
@@ -92,7 +147,7 @@ class Moderation(commands.Cog):
             await ctx.channel.purge(limit=int(number)+1)
         except:
             pass
-    
+
     @commands.command(aliases=["h", "Help", "H"], brief="Shows the help menu, which I guess you already saw")
     async def help(self, ctx, *, input=""):
         """Show to help page of the bot"""
@@ -202,6 +257,32 @@ class Moderation(commands.Cog):
 
             await ctx.send(f"Understood, my new prefix here is `{new_prefix}` ~")
 
+    @commands.command(aliases=["takerole"], brief="Removes the requested role(s) away from the requested user(s)")
+    @commands.has_permissions(manage_roles=True)
+    async def removerole(self, ctx):
+        if ctx.message.member_mentions:
+            
+            if ctx.message.role_mentions:
+
+                for member in ctx.message.mentions:
+                    
+                    for role in ctx.message.role_mentions:
+                        
+                        try:
+                            await member.remove_roles(role, reason=f"{ctx.author.name} asked me to")
+                        except discord.Forbidden:
+                            await ctx.send(f"I do not have permissions to remove {role.mention} role from {member.mention}")
+                        except:
+                            await ctx.send(f"An error occured while removing `{role.name}` role from {member.mention}")
+                
+                await ctx.message.add_reaction("\u2705")
+
+            else:
+                await ctx.send("Please use `removerole <@member mention> <@role mention>`")
+
+        else:
+            await ctx.send("Please use `removerole <@member mention> <@role mention>`")     
+
     @commands.command(brief="To see and modify my settings in here")
     async def settings(self, ctx):
         embed = discord.Embed(color=0xf8e3e1)
@@ -252,33 +333,16 @@ class Moderation(commands.Cog):
     async def support(self, ctx):
         """Sends the author an invite link to the support server in dms"""
         await ctx.author.send("Hey, here's the invite to my support server, I hope you'll find the help you need \n "
-                              "https://discord.gg/MBjkNqaSGW")
+                              "https://discord.gg/MBjkNqaSGW")  
 
-    @commands.command(aliases=["removerole"], brief="Takes the requested role(s) away from the requested user(s)")
-    @commands.has_permissions(manage_roles=True)
-    async def takerole(self, ctx):
-        if ctx.message.member_mentions:
-            
-            if ctx.message.role_mentions:
-
-                for member in ctx.message.mentions:
-                    
-                    for role in ctx.message.role_mentions:
-                        
-                        try:
-                            await member.remove_roles(role, reason=f"{ctx.author.name} asked me to")
-                        except Forbidden:
-                            await ctx.send(f"I do not have permissions to remove {role.mention} role from {member.mention}")
-                        except:
-                            await ctx.send(f"An error occured while removing `{role.name}` role from {member.mention}")
-                
-                await ctx.message.add_reaction("\u2705")
-
-            else:
-                await ctx.send("Please provide the role(s) to remove")
-
-        else:
-            await ctx.send("Please provide the member(s) to remove the role(s) from")       
+    @commands.command(aliases=["vot", "Vote", "votes"], brief="Gives you a link to vote for me on top.gg")
+    async def vote(self, ctx):
+        embed = discord.Embed(title="Click this to vote for me !",
+                              url="https://top.gg/bot/862433335833002045/vote",
+                              color=0xf8e3e1)
+        
+        embed.set_author(name="Nekotato's vote link", icon_url=self.bot.user.avatar_url)
+        await ctx.author.send(embed=embed)
 
     @commands.command(hidden=True)
     @commands.has_permissions(administrator=True)
@@ -322,9 +386,7 @@ def sql_get(server, request):
 
     cur.execute(f"select {request} from settings where server_id = ?", (str(server.id),))
     base.commit()
-    result = cur.fetchall()[0][0]
-
-    print(result)    
+    result = cur.fetchall()[0][0] 
 
     cur.close()
     return result

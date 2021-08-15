@@ -78,7 +78,7 @@ async def on_message(message):
                 else:
                     message.content = target_prefix + message.content[len(target_prefix):]
 
-            elif client.user.mentioned_in(message) and len(message.content) in [21, 22, 23]:
+            elif client.user.mentioned_in(message) and len(message.content) in [21, 22, 23] and "86243" in message.content:
                 # A mention is considered as a search for help
                 message.content = target_prefix + "help"
 

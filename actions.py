@@ -305,7 +305,7 @@ class Actions(commands.Cog):
 
         if ctx.message.mentions:
             description += " at"
-            for member in ctx.message.mention:
+            for member in ctx.message.mentions:
                 description += f" {member.mention}"
 
         embed = discord.Embed(color=0xffd1f3, description=description)

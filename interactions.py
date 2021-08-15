@@ -117,7 +117,7 @@ class Interactions(commands.Cog):
                 await ctx.send(embed=embed)
 
             else:
-                description = f"**{ctx.author.display_name}** is biting"
+                description = f"**{ctx.author.display_name}** bites"
                 for member in ctx.message.mentions:
                     description += f" {member.mention}"
                 embed = discord.Embed(color=0xffd1f3, description=description)
@@ -125,7 +125,16 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Thanks I guess (´・ω・｀)")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** bites {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.nom())
+            await ctx.send(embed=embed)
+
         else:
+
             await ctx.send("Biting the air ? How do you have friends acting like that ?")
 
     @commands.command(aliases=["Bonk", "bok", "Bok"])
@@ -147,6 +156,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="I'll try to stay pure")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** bonks {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.bonk())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Bonking the air ? How do you have friends acting like that ?")
 
@@ -157,7 +173,7 @@ class Interactions(commands.Cog):
 
             if len(ctx.message.mentions) == 1 and ctx.message.mentions[0] == ctx.author:
                 embed = discord.Embed(description="If you're chasing yourself you should run faster.", color=0xffd1f3)
-                embed.set_image(url=self.ints.cuddle())
+                embed.set_image(url=self.ints.chase())
                 await ctx.send(embed=embed)
 
             else:
@@ -165,9 +181,16 @@ class Interactions(commands.Cog):
                 for member in ctx.message.mentions:
                     description += f" {member.mention}"
                 embed = discord.Embed(color=0xffd1f3, description=description)
-                embed.set_image(url=self.ints.cuddle())
+                embed.set_image(url=self.ints.chase())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="(‘ - ’* ) Please stop I'm scared")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** is chasing {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.chase())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("You chase nobody, seems like you just wanna run.")
@@ -191,6 +214,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi thanks (〃ﾉωﾉ)")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** cuddles {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.cuddle())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Giving cuddles away ? May I catch some ?")
 
@@ -212,6 +242,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.glomp())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Yay \( ﾟヮﾟ)/")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** pounces on {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.glomp())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Nobody to pounce on, seems like you need friends.")
@@ -235,8 +272,15 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** hates {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.hate())
+            await ctx.send(embed=embed)
+
         else:
-            await ctx.send("Nobody to hold your hand, seems like people are too far for your short arms.")
+            await ctx.send(f"**{ctx.author.display_name}** is angry")
 
     @commands.command(aliases=["Handhold", "handholding", "Handholding", "hold hand", "Hold hand"])
     async def handhold(self, ctx, *, bullshit=None):
@@ -256,6 +300,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.handhold())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi thanks (′ꈍᴗꈍ‵)")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** is holding the hand of {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.handhold())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Nobody to hold your hand, seems like people are too far for your short arms.")
@@ -279,6 +330,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Yay \( ﾟヮﾟ)/")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** gives a highfive to {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.highfive())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Nobody to give a highfive to, seems like people are too far for your short arms.")
 
@@ -300,6 +358,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.hug())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi thanks (′ꈍᴗꈍ‵)")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** hugs {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.hug())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Giving hugs away ? May I catch one ?")
@@ -323,6 +388,14 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
 
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** killed {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.kill())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Seems like you need aim, I've no idea who you tried to kill.")
 
@@ -344,6 +417,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.kiss())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi thanks (〃ﾉωﾉ)")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** kisses {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.kiss())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Oh you poor, no one to kiss here")
@@ -367,6 +447,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Thanks I guess ( 〃．．)")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** licks {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.lick())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Licking the air ? You might want to look up at the same time :slight_smile:")
 
@@ -388,6 +475,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.pat())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi thanks (′ꈍᴗꈍ‵)")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** pets {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.pat())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Petting nobody ? pet me next time (〃ﾉωﾉ)")
@@ -411,6 +505,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="(‘ - ’* ) I'm literally here 24/7")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** pokes {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.poke())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Nobody to poke, seems like people are too far for your short arms.")
 
@@ -425,7 +526,7 @@ class Interactions(commands.Cog):
                 await ctx.send(embed=embed)
 
             else:
-                description = f"**{ctx.author.display_name}** is punching"
+                description = f"**{ctx.author.display_name}** punches"
                 for member in ctx.message.mentions:
                     description += f" {member.mention}"
                 embed = discord.Embed(color=0xffd1f3, description=description)
@@ -433,8 +534,15 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** punches {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.punch())
+            await ctx.send(embed=embed)
+
         else:
-            await ctx.send("Nobody to poke, seems like people are too far for your short arms.")
+            await ctx.send("Nobody to punch, seems like people are too far for your short arms.")
 
     @commands.command(aliases=["Shoot", "shot", "Shot", "Shoots", "shoots", "shots", "Shots"])
     async def shoot(self, ctx, *, bullshit=None):
@@ -454,6 +562,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.shoot())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** shot {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.shoot())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Seems like you need aim, I've no idea who you tried to shoot.")
@@ -477,6 +592,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** slapped {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.slap())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Nobody to slap, seems like people are too far for your short arms.")
 
@@ -498,6 +620,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.stab())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Not cool T.T")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** stabbed {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.stab())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Nobody to stab, seems like people are too far for your short arms.")
@@ -521,6 +650,13 @@ class Interactions(commands.Cog):
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi stop uwu")
                 await ctx.send(embed=embed)
 
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** teases {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.tease())
+            await ctx.send(embed=embed)
+
         else:
             await ctx.send("Nobody to tease, seems like you're just awkward.")
 
@@ -542,6 +678,13 @@ class Interactions(commands.Cog):
                 embed.set_image(url=self.ints.tickle())
                 if self.bot.user.mentioned_in(ctx.message): embed.set_footer(text="Hihi stop uwu")
                 await ctx.send(embed=embed)
+
+        elif bullshit is not None and len(bullshit) > 2:
+            if bullshit == "random": bullshit = random.choice(ctx.guild.members).mention
+            description = f"**{ctx.author.display_name}** tickles {bullshit}"
+            embed = discord.Embed(color=0xffd1f3, description=description)
+            embed.set_image(url=self.ints.tickle())
+            await ctx.send(embed=embed)
 
         else:
             await ctx.send("Nobody to tickle, seems like people are too far for your short arms.")
